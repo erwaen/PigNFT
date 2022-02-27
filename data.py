@@ -1,21 +1,28 @@
 ####### RANKS #######
 ranks = {
     "Bronze": {
+        "rank_name": "Bronze",
         "probability": 20
     },
     "Silver": {
+        "rank_name": "Silver",
         "probability": 20
     },
     "Gold": {
+        "rank_name": "Gold",
         "probability": 20
     },
     "Platinum": {
+        "rank_name": "Platinum",
         "probability": 20
     },
     "Diamond": {
+        "rank_name": "Diamond",
         "probability": 20
     }
 }
+
+
 
 
 ###### IMAGES ######
@@ -34,12 +41,12 @@ images = {
                 {
                     "name": "Face mask",
                     "file_name": "boca3",
-                    "rank": ranks["Bronze"],
+                    "rank": ranks["Silver"],
                 },
                 {
                     "name": "Smoking",
                     "file_name": "boca4",
-                    "rank": ranks["Bronze"],
+                    "rank": ranks["Gold"],
                 },
                 {
                     "name": "2 teeth",
@@ -130,7 +137,6 @@ images = {
                 {
                     "name": "Avocado",
                     "file_name": "ojos4",
-  
                     "rank": ranks["Bronze"],
                 },
                 {
@@ -368,3 +374,5 @@ images = {
         },  
     ]
 }
+
+order = ["Background", "Shape", "Clothing", "Ears", "Hat", "Eyes", "Nose", "Mouth"] # The order of the layers
