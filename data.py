@@ -1,13 +1,24 @@
 ####### RANKS #######
-ranks = [
-            "Bronze",
-            "Silver",
-            "Gold",
-            "Platinum",
-            "Diamond"
-        ]
+ranks = {
+    "Bronze": {
+        "probability": 20
+    },
+    "Silver": {
+        "probability": 20
+    },
+    "Gold": {
+        "probability": 20
+    },
+    "Platinum": {
+        "probability": 20
+    },
+    "Diamond": {
+        "probability": 20
+    }
+}
 
 
+###### IMAGES ######
 images = {
     "Mouth": [
                 {
@@ -263,5 +274,97 @@ images = {
                     "file_name": "silueta1",
                     "rank": ranks[0],
                 },
+                {
+                    "name": "Green Zombie",
+                    "file_name": "silueta2",
+                    "rank": ranks[0],
+                },
+                {
+                    "name": "Purple Zombie",
+                    "file_name": "silueta3",
+                    "rank": ranks[0],
+                },
+                {
+                    "name": "Robot",
+                    "file_name": "silueta4",
+                    "rank": ranks[0],
+                },
+                {
+                    "name": "Sponge",
+                    "file_name": "silueta5",
+                    "rank": ranks[0],
+                },
+                {
+                    "name": "Blue",
+                    "file_name": "silueta6",
+                    "rank": ranks[0],
+                },
+                {
+                    "name": "Purple",
+                    "file_name": "silueta7",
+                    "rank": ranks[0],
+                },
+                {
+                    "name": "Pimples",
+                    "file_name": "silueta8",
+                    "rank": ranks[0],
+                },
+                {
+                    "name": "Water green",
+                    "file_name": "silueta9",
+                    "rank": ranks[0],
+                },
+                {
+                    "name": "The boy who lived",
+                    "file_name": "silueta10",
+                    "rank": ranks[0],
+                },
+    ],
+    "Hat": [
+        {
+            "name": "Arrow",
+            "file_name": "sombrero1",
+            "rank": ranks[0],
+        },
+        {
+            "name": "Chef",
+            "file_name": "sombrero2",
+            "rank": ranks[0],
+        },
+        {
+            "name": "Mexican",
+            "file_name": "sombrero3",
+            "rank": ranks[0],
+        },
+        {
+            "name": "Duck",
+            "file_name": "sombrero4",
+            "rank": ranks[0],
+        },
+        {
+            "name": "Beret",
+            "file_name": "sombrero5",
+            "rank": ranks[0],
+        },
+        {
+            "name": "Sergeant",
+            "file_name": "sombrero6",
+            "rank": ranks[0],
+        },
+        {
+            "name": "Santa Claus",
+            "file_name": "sombrero7",
+            "rank": ranks[0],
+        },
+        {
+            "name": "Caravan",
+            "file_name": "sombrero8",
+            "rank": ranks[0],
+        },
+        {
+            "name": "Crown",
+            "file_name": "sombrero9",
+            "rank": ranks[0],
+        },  
     ]
 }
