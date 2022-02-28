@@ -63,6 +63,7 @@ def generate_image(image_obj):
 
 
 
+
 def main():
     TOTAL_IMAGES =  int(input("How many images do you want generate? "))
 
@@ -75,9 +76,6 @@ def main():
 
     for image in all_images:
         generate_image(image)
-        
-  
-
 
 
 all_images = []

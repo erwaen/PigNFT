@@ -1,6 +1,8 @@
 # My Folders
 images/
 result/
+assets/recovery_phrase.txt
+assets/password.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
