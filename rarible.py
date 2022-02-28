@@ -59,7 +59,7 @@ def login_metamask():
     except Exception as e:
         print(e)
 
-def rarible():
+def sign_in_rarible():
     driver.get("https://rarible.com/")
     try:
         sign_in_btn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'sign-in')))
@@ -77,6 +77,8 @@ def rarible():
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app-content"]/div/div[3]/div/div[2]/div[4]/div[2]/button[2]'))).click()
         # Click on "Connect" button.
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app-content"]/div/div[3]/div/div[2]/div[2]/div[2]/footer/button[2]'))).click()
+
+        print("\n$$$$$ LOGGED TO RARIBLE $$$$$\n")
     
         
     except Exception as e:
@@ -104,7 +106,7 @@ if __name__ == '__main__':
     driver.maximize_window()  # Maximize window to reach all elements.
 
     login_metamask()
-    rarible()
+    sign_in_rarible()
 
     
 
