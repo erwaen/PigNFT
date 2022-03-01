@@ -98,10 +98,53 @@ def upload_image_rarible():
     # Go to the page to upload the nft on etherum
     driver.get("https://rarible.com/create/erc-721")
     try:
+        # get the input tag for upload a image file
         choose_file_btn = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[1]/div[2]/div/input')))
         image_path = get_image_path()
         print(os.getcwd())
-        choose_file_btn.send_keys(image_path)
+       
+        choose_file_btn.send_keys(image_path) # Send the image file to rarible
+
+        timed_auction_option_btn = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[3]/div/div/button[3]')
+        timed_auction_option_btn.click()
+
+        minimun_bid_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#root > div:nth-child(2) > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-cCcXHH.ebRXgR.clWcnz.dbbKCr > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-eXlEPa.ebRXgR.clWcnz.iXKoRS > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-fbyfCU.sc-GEbAx.sc-fmciRz.ebRXgR.clWcnz.fNQPTr.cmoGy.kbMOKW > div > div > div > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.fSHCvX.clWcnz > div:nth-child(4) > div > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-gIBqdA.eWvLRx.clWcnz.YWhZx > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.iuoVZP.clWcnz > input')))
+        minimun_bid_input.send_keys('0.23')
+        seven_days_opt = None
+        while seven_days_opt is None:
+            try:
+                expiration_date_btn_selector = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[5]/div/div/div[2]/div/div[2]/div[1]/input')))
+                expiration_date_btn_selector.click()
+                # expiration_date_btn_selector.send_keys('7 days')
+                # expiration_date_btn_selector.send_keys(Keys.RETURN)
+                
+                days_list_options = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="tippy-11"]/div/div/div/div/div[1]/div/div')))
+                days_options_btns = days_list_options.find_elements(By.TAG_NAME, 'button')
+
+                for day_opt in days_options_btns:
+                    divs = day_opt.find_elements(By.TAG_NAME, 'div')
+                    for div in divs:
+                        
+                        print("the text is: ", div.text)
+                        if div.text == "7 days":
+                            seven_days_opt = day_opt
+                       
+            except Exception as e:
+                print(e)
+
+        seven_days_opt.click() 
+            
+    
+          
+        
+        seven_days_opt
+                
+            
+            # for child in day_opt:
+                # if (child.text == "7 days"):
+                   
+        # seven_days_opt_btn = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#tippy-15 > div > div > div > div > div:nth-child(1) > div > div > button:nth-child(4)')))
+        # seven_days_opt_btn.click()
     except Exception as e:
         print(e)
   
