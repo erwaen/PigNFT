@@ -71,7 +71,7 @@ def sign_in_rarible():
         # Now this open a  little new window of metamask extensiond
       
         sleep(3) ##wait to open the new window
-        print("the windows handle is ", len(driver.window_handles))
+        
         driver.switch_to.window(driver.window_handles[2]) # change the driver to the new window (metamask extension)
         # Click on "Next" button.
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app-content"]/div/div[3]/div/div[2]/div[4]/div[2]/button[2]'))).click()
@@ -79,6 +79,7 @@ def sign_in_rarible():
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app-content"]/div/div[3]/div/div[2]/div[2]/div[2]/footer/button[2]'))).click()
 
         print("\n$$$$$ LOGGED TO RARIBLE $$$$$\n")
+        driver.switch_to.window(driver.window_handles[0]) # Back to our main window
     
         
     except Exception as e:
@@ -93,6 +94,21 @@ def get_metamask_credentials():
     f.close()
     return recovery_phrase, password
 
+def upload_image_rarible():
+    # Go to the page to upload the nft on etherum
+    driver.get("https://rarible.com/create/erc-721")
+    try:
+        choose_file_btn = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[1]/div[2]/div/input')))
+        image_path = get_image_path()
+        print(os.getcwd())
+        choose_file_btn.send_keys(image_path)
+    except Exception as e:
+        print(e)
+  
+   
+
+def get_image_path():
+    return 'G:/My Drive/Developer/nft/PigNFT/result/0.png'
     
 
 
@@ -107,7 +123,7 @@ if __name__ == '__main__':
 
     login_metamask()
     sign_in_rarible()
-
+    upload_image_rarible()
     
 
 
