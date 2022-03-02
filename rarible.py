@@ -108,52 +108,87 @@ def upload_image_rarible():
         timed_auction_option_btn = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[3]/div/div/button[3]')
         timed_auction_option_btn.click()
 
-        minimun_bid_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#root > div:nth-child(2) > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-cCcXHH.ebRXgR.clWcnz.dbbKCr > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-eXlEPa.ebRXgR.clWcnz.iXKoRS > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-fbyfCU.sc-GEbAx.sc-fmciRz.ebRXgR.clWcnz.fNQPTr.cmoGy.kbMOKW > div > div > div > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.fSHCvX.clWcnz > div:nth-child(4) > div > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-gIBqdA.eWvLRx.clWcnz.YWhZx > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.iuoVZP.clWcnz > input')))
+        minimun_bid_input = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#root > div:nth-child(2) > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-cCcXHH.ebRXgR.clWcnz.dbbKCr > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-eXlEPa.ebRXgR.clWcnz.iXKoRS > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-fbyfCU.sc-GEbAx.sc-fmciRz.ebRXgR.clWcnz.fNQPTr.cmoGy.kbMOKW > div > div > div > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.fSHCvX.clWcnz > div:nth-child(4) > div > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-gIBqdA.eWvLRx.clWcnz.YWhZx > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.iuoVZP.clWcnz > input')))
         minimun_bid_input.send_keys('0.23')
         seven_days_opt = None
-        while seven_days_opt is None:
-            try:
-                expiration_date_btn_selector = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[5]/div/div/div[2]/div/div[2]/div[1]/input')))
-                expiration_date_btn_selector.click()
-                # expiration_date_btn_selector.send_keys('7 days')
-                # expiration_date_btn_selector.send_keys(Keys.RETURN)
-                
-                days_list_options = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="tippy-11"]/div/div/div/div/div[1]/div/div')))
-                days_options_btns = days_list_options.find_elements(By.TAG_NAME, 'button')
-
-                for day_opt in days_options_btns:
-                    divs = day_opt.find_elements(By.TAG_NAME, 'div')
-                    for div in divs:
-                        
-                        print("the text is: ", div.text)
-                        if div.text == "7 days":
-                            seven_days_opt = day_opt
-                       
-            except Exception as e:
-                print(e)
-
-        seven_days_opt.click() 
-            
-    
-          
         
-        seven_days_opt
-                
+        try:
+            expiration_date_btn_selector = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[5]/div/div/div[2]/div/div[2]/div[1]/input')))
+            expiration_date_btn_selector.click()
+            # expiration_date_btn_selector.send_keys('7 days')
+            # expiration_date_btn_selector.send_keys(Keys.RETURN)
             
-            # for child in day_opt:
-                # if (child.text == "7 days"):
-                   
-        # seven_days_opt_btn = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#tippy-15 > div > div > div > div > div:nth-child(1) > div > div > button:nth-child(4)')))
-        # seven_days_opt_btn.click()
+            days_list_options = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="tippy-11"]/div/div/div/div/div[1]/div/div')))
+            if days_list_options:
+                print("Encontro la lista")
+            days_options_btns = days_list_options.find_elements(By.TAG_NAME, 'button')
+
+            for day_opt in days_options_btns:
+                divs = day_opt.find_elements(By.TAG_NAME, 'div')
+                for div in divs:
+                    
+                    print("the text is: ", div.text)
+                    if div.text == "7 days":
+                        seven_days_opt = day_opt
+                        seven_days_opt.click() 
+                    
+        except Exception as e:
+            print("Error to find the days list element:\nTrying again...\n ", e)
+                # upload_image_rarible()
+
+
+        
+
+        image_name, image_description = get_name_and_description_image()
+        name_inp = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[9]/div/div[2]/div/input')
+        description_inp = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[10]/div/div[2]/div/textarea')
+        name_inp.send_keys(image_name)
+        description_inp.send_keys(image_description)
+
+        # Click on 'show advance options'
+        show_adv_opt_btn = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[12]/button')
+        show_adv_opt_btn.click()
+
+        image_properties = get_image_properties()
+
+        # Fill properties options (property and value)
+        for index, key in enumerate(image_properties):
+            new_index = index * 2
+            prop_inp = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, f'//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[12]/div/div[1]/div[2]/div[{new_index+1}]/div/input')))
+            value_inp = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, f'//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[12]/div/div[1]/div[2]/div[{new_index+2}]/div/input')))
+            prop_inp.send_keys(key)
+            value_inp.send_keys(image_properties[key])
+        
+        # Click to finish btn
+        create_item_btn = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, f'//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[13]/div/div/button')))
+        create_item_btn.click()
+        
+        # Change to metamask extension pop up window
+        sign_in_btn = '//*[@id="app-content"]/div/div[3]/div/div[4]/button[2]'
     except Exception as e:
         print(e)
-  
+
+    
+    # //*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[12]/div/div[1]/div[2]/div[1]/div/input
+    # //*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[12]/div/div[1]/div[2]/div[2]/div/input
+    # //*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[12]/div/div[1]/div[2]/div[3]/div/input
    
 
 def get_image_path():
     return 'G:/My Drive/Developer/nft/PigNFT/result/0.png'
     
+def get_name_and_description_image():
+    name = "Pig #0"
+    description = "A nice Pig"
+    return name, description
 
+def get_image_properties():
+    properties = {
+        'background': "1",
+        'shape': 'normal',
+        'Nose': 'rare',
+    }
+    return properties
 
 if __name__ == '__main__':
     options = webdriver.ChromeOptions()  # Configure options for Chrome.
