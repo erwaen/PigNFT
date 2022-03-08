@@ -234,8 +234,8 @@ if __name__ == '__main__':
 
     for image_metadata in metadata["nft"]:
         upload_image_rarible(image_metadata)
-        input("type and enter to close")
-        sleep(6)
+        
+        sleep(10)
     
 
 

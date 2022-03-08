@@ -89,8 +89,7 @@ def generate_metadata_of_image(image_obj, file_path):
     
     metadata_of_img["price"] = str(price)
 
-    for key, val in metadata_of_img.items():
-        print(key,": ", val)
+    
 
     metadata["nft"].append(metadata_of_img)
 
@@ -120,7 +119,7 @@ def main():
 
     
     for image in all_images:
-        print("imagen es:" , image)
+       
         generate_image(image)
 
     generate_metadata_json()
