@@ -3,6 +3,9 @@ import data as my_data
 from PIL import Image
 import json
 import os
+from os.path import abspath
+
+
 
 
 
@@ -23,7 +26,7 @@ def create_new_image_obj():
 
     # the recursive function call is on the occasion that the image was created a repeated
     if new_image in all_images:
-        return create_new_image()
+        return create_new_image_obj()
     else:
         return new_image
 
@@ -52,15 +55,56 @@ def generate_image(image_obj):
     rgb_im = combined_image.convert('RGB')
     file_name = str(image_obj["tokenId"]) + ".png"
     path_result = "./result"
+
+    total_file_path = f"{path_result}" + "/" + file_name
      
     # Create a new directory because it does not exist 
     if not os.path.exists(path_result):
         os.makedirs(path_result)
     
-    rgb_im.save(f"{path_result}" + "/" + file_name)
+    rgb_im.save(total_file_path)
+    generate_metadata_of_image(image_obj, total_file_path)
 
 
+def generate_metadata_of_image(image_obj, file_path):
+    full_path = abspath( file_path)
+  
+    
+    metadata_of_img = {}
+    metadata_of_img["file_path"] = full_path
+    metadata_of_img["nft_name"] = "PIG #"+str(image_obj["tokenId"])
+    metadata_of_img["description"] = "Hope you like mud!" 
+    metadata_of_img["properties"] = []
+    price = 0
+    for key_property in image_obj:
+        if key_property != "tokenId":
+            property = key_property
+            value_property = image_obj[property]["name"]
+            a_property = {
+                "type": property,
+                "value": value_property
+            }
+            price += image_obj[key_property]["rank"]["price"]
+            metadata_of_img["properties"].append(a_property)
+    
+    metadata_of_img["price"] = str(price)
 
+    for key, val in metadata_of_img.items():
+        print(key,": ", val)
+
+    metadata["nft"].append(metadata_of_img)
+
+ 
+def generate_metadata_json():
+
+    if not os.path.exists("./metadata"):
+        os.makedirs("./metadata")
+    with open("./metadata/" + "_metadata" ".json", "w") as outfile:
+        json.dump(metadata, outfile, indent=4)
+    
+    
+
+    
 
 
 
@@ -74,9 +118,15 @@ def main():
 
     put_ids_to_all_images()
 
+    
     for image in all_images:
+        print("imagen es:" , image)
         generate_image(image)
+
+    generate_metadata_json()
+        
 
 
 all_images = []
+metadata = {"nft": []}
 main()

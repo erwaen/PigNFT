@@ -8,11 +8,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+import json
 
 # Python default import.
 from time import sleep
 from glob import glob
 import os
+
+METADATA = []
 
 def login_metamask():
     print('Login to MetaMask extension.', end=' ')
@@ -94,22 +97,23 @@ def get_metamask_credentials():
     f.close()
     return recovery_phrase, password
 
-def upload_image_rarible():
+def upload_image_rarible(image_data):
     # Go to the page to upload the nft on etherum
     driver.get("https://rarible.com/create/erc-721")
     try:
         # get the input tag for upload a image file
         choose_file_btn = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[1]/div[2]/div/input')))
-        image_path = get_image_path()
-        print(os.getcwd())
+        image_path = get_image_path(image_data)
+    
        
         choose_file_btn.send_keys(image_path) # Send the image file to rarible
 
         timed_auction_option_btn = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[3]/div/div/button[3]')
         timed_auction_option_btn.click()
 
+        price = get_price(image_data)
         minimun_bid_input = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#root > div:nth-child(2) > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-cCcXHH.ebRXgR.clWcnz.dbbKCr > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-eXlEPa.ebRXgR.clWcnz.iXKoRS > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-fbyfCU.sc-GEbAx.sc-fmciRz.ebRXgR.clWcnz.fNQPTr.cmoGy.kbMOKW > div > div > div > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.fSHCvX.clWcnz > div:nth-child(4) > div > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.sc-gIBqdA.eWvLRx.clWcnz.YWhZx > div.sc-bdvvtL.sc-crHmcD.sc-egiyK.iuoVZP.clWcnz > input')))
-        minimun_bid_input.send_keys('0.23')
+        minimun_bid_input.send_keys(price)
         seven_days_opt = None
         
         try:
@@ -139,7 +143,7 @@ def upload_image_rarible():
 
         
 
-        image_name, image_description = get_name_and_description_image()
+        image_name, image_description = get_name_and_description_image(image_data)
         name_inp = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[9]/div/div[2]/div/input')
         description_inp = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[10]/div/div[2]/div/textarea')
         name_inp.send_keys(image_name)
@@ -149,7 +153,7 @@ def upload_image_rarible():
         show_adv_opt_btn = driver.find_element(By.XPATH, '//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[12]/button')
         show_adv_opt_btn.click()
 
-        image_properties = get_image_properties()
+        image_properties = get_image_properties(image_data)
 
         # Fill properties options (property and value)
         for index, key in enumerate(image_properties):
@@ -160,11 +164,24 @@ def upload_image_rarible():
             value_inp.send_keys(image_properties[key])
         
         # Click to finish btn
-        create_item_btn = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, f'//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[13]/div/div/button')))
+        create_item_btn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, f'//*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[13]/div/div/button')))
         create_item_btn.click()
         
         # Change to metamask extension pop up window
         sign_in_btn = '//*[@id="app-content"]/div/div[3]/div/div[4]/button[2]'
+        sign_btn = '//*[@id="app-content"]/div/div[3]/div/div[3]/button[2]'
+        sleep(20) ##wait to open the new window
+        
+        driver.switch_to.window(driver.window_handles[2]) # change the driver to the new window (metamask extension)
+        # Click on "Next" button.
+        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, sign_in_btn))).click()
+        
+        sleep(15)
+        driver.switch_to.window(driver.window_handles[2])
+        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, sign_btn))).click()
+
+        print("\n$$$$$ Imagen subida $$$$$\n")
+        driver.switch_to.window(driver.window_handles[0]) # Back to our main window
     except Exception as e:
         print(e)
 
@@ -174,21 +191,31 @@ def upload_image_rarible():
     # //*[@id="root"]/div[2]/div[2]/div[2]/div[1]/div/div/div/div[1]/div[12]/div/div[1]/div[2]/div[3]/div/input
    
 
-def get_image_path():
-    return 'G:/My Drive/Developer/nft/PigNFT/result/0.png'
+def get_image_path(image_data):
+    return image_data["file_path"]
+
+def get_price(image_data):
+    return image_data["price"]
     
-def get_name_and_description_image():
-    name = "Pig #0"
-    description = "A nice Pig"
+def get_name_and_description_image(image_obj):
+    name = image_obj["nft_name"]
+    description = image_obj["description"]
     return name, description
 
-def get_image_properties():
-    properties = {
-        'background': "1",
-        'shape': 'normal',
-        'Nose': 'rare',
-    }
-    return properties
+def get_image_properties(image_obj):
+    properties = image_obj["properties"]
+    properties_to_return = {}
+    for property in properties:
+        properties_to_return[property["type"]] = property["value"]
+    
+    return properties_to_return
+
+def get_metadata():
+
+    with open('./metadata/_metadata.json') as json_file:
+        data = json.load(json_file)
+    
+        return data
 
 if __name__ == '__main__':
     options = webdriver.ChromeOptions()  # Configure options for Chrome.
@@ -198,10 +225,17 @@ if __name__ == '__main__':
     options.add_argument("--mute-audio")  # Audio is muted.
     driver = webdriver.Chrome("assets/chromedriver.exe",  options=options)
     driver.maximize_window()  # Maximize window to reach all elements.
+    
+    metadata = get_metadata()
+  
 
     login_metamask()
     sign_in_rarible()
-    upload_image_rarible()
+
+    for image_metadata in metadata["nft"]:
+        upload_image_rarible(image_metadata)
+        input("type and enter to close")
+        sleep(6)
     
 
 
